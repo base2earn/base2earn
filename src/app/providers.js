@@ -19,27 +19,27 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { CHAIN_ID } from "../statics/addresses";
 
 const baseChain = {
-  id: CHAIN_ID,
-  name: "Shibarium",
-  network: "Shibarium",
-  iconUrl: "https://uploads-ssl.webflow.com/64a576093dd515c9042b0db7/64a576093dd515c9042b0e15_Shibariumtech.svg",
+  id: 8453,
+  name: "Base",
+  network: "Base Mainnet",
+  iconUrl: "https://basescan.org/images/logo-symbol.svg",
   iconBackground: "#fff",
   nativeCurrency: {
     decimals: 18,
-    name: "Bone",
-    symbol: "BONE",
+    name: "Ethereum",
+    symbol: "ETH",
   },
   rpcUrls: {
     public: {
-      http: ["https://www.shibrpc.com/"],
+      http: ["https://mainnet.base.org"],
     },
     default: {
-      http: ["https://www.shibrpc.com/"],
+      http: ["https://mainnet.base.org"],
     },
   },
   blockExplorers: {
-    default: { name: "ShibariumScan", url: "https://www.shibariumscan.io/" },
-    etherscan: { name: "ShibariumScan", url: "https://www.shibariumscan.io/" },
+    default: { name: "BaseScan", url: "https://basescan.org" },
+    etherscan: { name: "BaseScan", url: "https://basescan.org" },
   },
   testnet: false,
 };
@@ -58,7 +58,7 @@ const projectId = process.env.NEXT_PUBLIC_APP_ID
   : "";
 
 const demoAppInfo = {
-  appName: "DOPAMOON",
+  appName: "BASE2EARN",
 };
 
 const connectors = connectorsForWallets([
@@ -67,7 +67,7 @@ const connectors = connectorsForWallets([
     wallets: [
       rabbyWallet({ chains }),
       metaMaskWallet({ projectId, chains }),
-      coinbaseWallet({ appName: "DOPAMOON", chains }),
+      coinbaseWallet({ appName: "BASE2EARN", chains }),
       safeWallet({ chains }),
     ],
   },

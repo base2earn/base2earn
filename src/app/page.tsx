@@ -1,94 +1,31 @@
 "use client";
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
-import Image from "next/image";
 import NumberInput from "@/src/components/Reusable/NumberInput";
 import { Address, parseEther } from "viem";
 import useTokenBalance from "@/src/hooks/useTokenBalance";
 import { useWeb2Context } from "@/src/contexts/web2Context";
 import useAllowance from "@/src/hooks/useAllowance";
 import useApprove from "@/src/hooks/useApprove";
-import {
-  DOPAMOON_ADDRESS,
-  LP_ADDRESS,
-  SHEX_ADDRESS,
-  STAKING_CONTRACT,
-} from "@/src/statics/addresses";
-import useStake from "@/src/hooks/useBurn";
-import useWithdraw from "@/src/hooks/useWithdraw";
+import { B2E_ADDRESS, CONTRACT } from "@/src/statics/addresses";
+import useBurn from "@/src/hooks/useBurn";
 import { formatNumberToCurrency } from "@/src/statics/helpers/numberFormatter";
-import usePendingRewards from "@/src/hooks/usePendingRewards";
-import useClaim from "@/src/hooks/useClaim";
-import lpLogo from "@/src/statics/images/logo.png";
 import useTotalStakedLP from "@/src/hooks/useTotalStakedLP";
 import useUserStakedLP from "@/src/hooks/useUserStakedLP";
-import useLPPrice from "@/src/hooks/useLPPrice";
-import useDopaRewardData from "@/src/hooks/useDopaRewardData";
-import useShexRewardData from "@/src/hooks/useShexRewardData";
-import useBurn from "@/src/hooks/useBurn";
 
 export default function Stake() {
   const [value, setValue] = useState("");
 
   const web2Context = useWeb2Context();
-  const dopaLPBalance = useTokenBalance(LP_ADDRESS);
+  const b2eBalance = useTokenBalance(B2E_ADDRESS);
 
   const totalStakedLP = useTotalStakedLP();
   const userStakedLP = useUserStakedLP();
-  const dopaPendingRewards = usePendingRewards(DOPAMOON_ADDRESS);
-  const shexPendingRewards = usePendingRewards(SHEX_ADDRESS);
-  const dopaRewardRate = useDopaRewardData();
-
-  const lpPrice = useLPPrice(
-    web2Context && web2Context.bonePrice ? Number(web2Context.bonePrice) : 0
-  );
-
-  const dopaAPR = useMemo(() => {
-    if (web2Context && web2Context.dopamoonPrice && dopaRewardRate) {
-      const userStakedLPCheck = userStakedLP ? userStakedLP : 1;
-      const userLPTokensValue = userStakedLPCheck * lpPrice;
-
-      const dopaPerYear = dopaRewardRate * 60 * 60 * 24 * 365;
-
-      const userYearlyRewards =
-        (dopaPerYear * userStakedLPCheck) / totalStakedLP;
-
-      const userYearlyRewardsValue =
-        userYearlyRewards * Number(web2Context.dopamoonPrice);
-
-      return ((userYearlyRewardsValue / userLPTokensValue) * 100).toFixed(0);
-    }
-    return 0;
-  }, [lpPrice, userStakedLP, web2Context, totalStakedLP, dopaRewardRate]);
-
-  const shexAPR = useMemo(() => {
-    if (web2Context && web2Context.dopamoonPrice && web2Context.shexPerDay) {
-      const userStakedLPCheck = userStakedLP ? userStakedLP : 1;
-      const userLPTokensValue = userStakedLPCheck * lpPrice;
-
-      const shexPerYear = Number(web2Context.shexPerDay) * 365;
-
-      const userYearlyRewards =
-        (shexPerYear * userStakedLPCheck) / totalStakedLP;
-
-      const userYearlyRewardsValue =
-        userYearlyRewards * Number(web2Context.shexPrice);
-
-      console.log("totalRewardsValue", userYearlyRewardsValue);
-
-      return ((userYearlyRewardsValue / userLPTokensValue) * 100).toFixed(0);
-    }
-    return 0;
-  }, [lpPrice, userStakedLP, web2Context, totalStakedLP]);
 
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
 
-  const dopaAllowance = useAllowance(LP_ADDRESS as Address, STAKING_CONTRACT);
-  const approveLPTX = useApprove(
-    amountIn,
-    LP_ADDRESS as Address,
-    STAKING_CONTRACT
-  );
+  const b2eAllowance = useAllowance(B2E_ADDRESS as Address, CONTRACT);
+  const approveTX = useApprove(amountIn, B2E_ADDRESS as Address, CONTRACT);
 
   const burnTX = useBurn(amountIn, amountIn > 0);
 
@@ -114,9 +51,13 @@ export default function Stake() {
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">{totalStakedLP.toFixed(4)}</div>
                   <div>
-                    {lpPrice && (
+                    {web2Context && (
                       <span>
-                        ({formatNumberToCurrency(totalStakedLP * lpPrice)})
+                        (
+                        {formatNumberToCurrency(
+                          totalStakedLP * Number(web2Context.ethPrice)
+                        )}
+                        )
                       </span>
                     )}
                   </div>
@@ -127,9 +68,13 @@ export default function Stake() {
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">{totalStakedLP.toFixed(4)}</div>
                   <div>
-                    {lpPrice && (
+                    {web2Context && (
                       <span>
-                        ({formatNumberToCurrency(totalStakedLP * lpPrice)})
+                        (
+                        {formatNumberToCurrency(
+                          totalStakedLP * Number(web2Context.b2ePrice)
+                        )}
+                        )
                       </span>
                     )}
                   </div>
@@ -140,9 +85,13 @@ export default function Stake() {
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">{userStakedLP.toFixed(4)}</div>
                   <div>
-                    {lpPrice && (
+                    {web2Context && (
                       <span>
-                        ({formatNumberToCurrency(userStakedLP * lpPrice)})
+                        (
+                        {formatNumberToCurrency(
+                          totalStakedLP * Number(web2Context.b2ePrice)
+                        )}
+                        )
                       </span>
                     )}
                   </div>
@@ -153,11 +102,9 @@ export default function Stake() {
             <div className="mt-6">
               <div className="w-full justify-between flex">
                 <div className="flex gap-1">
-                  <div>In Wallet:</div>
+                  <div>In Wallet: </div>
                   <div className="font-bold">
-                    {dopaLPBalance
-                      ? Number(dopaLPBalance.formatted).toFixed(4)
-                      : "0"}
+                    {b2eBalance ? Number(b2eBalance.formatted).toFixed(4) : "0"}
                     B2E
                   </div>
                 </div>
@@ -171,33 +118,31 @@ export default function Stake() {
               </div>
 
               <NumberInput
-                tokenSymbol="DOPA"
+                tokenSymbol="B2E"
                 value={value}
-                balance={dopaLPBalance ? dopaLPBalance.formatted : "0"}
+                balance={b2eBalance ? b2eBalance.formatted : "0"}
                 setValueCallback={setValue}
-                unitPrice={lpPrice}
+                unitPrice={web2Context?.b2ePrice}
               />
               <div className="mt-6 w-full flex justify-between gap-6 font-bold">
-                {amountIn > 0 && dopaAllowance < amountIn ? (
+                {amountIn > 0 && b2eAllowance < amountIn ? (
                   <button
-                    disabled={!approveLPTX.transaction.write || !value}
+                    disabled={!approveTX.transaction.write || !value}
                     onClick={() => {
-                      if (approveLPTX.transaction.write) {
-                        approveLPTX.transaction.write();
+                      if (approveTX.transaction.write) {
+                        approveTX.transaction.write();
                       }
                     }}
                     className="disabled:contrast-50 bg-moon rounded-md w-full gap-2 transition-transform relative flex justify-center items-center px-4 h-12"
                   >
-                    {approveLPTX.confirmation.isLoading
-                      ? "APPROVING"
-                      : "APPROVE"}
+                    {approveTX.confirmation.isLoading ? "APPROVING" : "APPROVE"}
                   </button>
                 ) : (
                   <button
                     disabled={
                       !burnTX.transaction.write ||
                       !value ||
-                      (dopaLPBalance && amountIn > dopaLPBalance.value)
+                      (b2eBalance && amountIn > b2eBalance.value)
                     }
                     onClick={() => {
                       if (burnTX.transaction.write) {

@@ -6,11 +6,11 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import swampABI from "../statics/abis/LPStakingABI.json";
-import { STAKING_CONTRACT } from "../statics/addresses";
+import { CONTRACT } from "../statics/addresses";
 
 export default function useBurn(amountIn: BigInt, enabled: boolean) {
   const preparation = usePrepareContractWrite({
-    address: STAKING_CONTRACT as Address,
+    address: CONTRACT as Address,
     abi: swampABI,
     enabled: enabled,
     functionName: "burn",

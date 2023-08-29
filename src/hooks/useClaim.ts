@@ -5,11 +5,11 @@ import {
   useWaitForTransaction,
 } from "wagmi";
 import swampABI from "../statics/abis/LPStakingABI.json";
-import { STAKING_CONTRACT } from "../statics/addresses";
+import { CONTRACT } from "../statics/addresses";
 
 export default function useClaim() {
   const preparation = usePrepareContractWrite({
-    address: STAKING_CONTRACT as Address,
+    address: CONTRACT as Address,
     abi: swampABI,
     functionName: "getReward",
     args: [true],

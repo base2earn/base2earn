@@ -63,8 +63,8 @@ export default function Header() {
             >
               <Image src={logo} alt="logo" height={35} />
               {web2Context &&
-                web2Context.dopamoonPrice &&
-                `$${web2Context.dopamoonPrice.toFixed(2)}`}
+                web2Context.b2ePrice &&
+                `$${web2Context.b2ePrice.toFixed(2)}`}
             </a>
           </motion.div>
         </div>
@@ -79,7 +79,7 @@ export default function Header() {
           className="z-50 flex h-16 backdrop-blur-md shadow-lg"
         >
           <a
-            href="https://discord.gg/e4uUDw4h"
+            href="https://discord.gg/9sYVbTfaaN"
             target="_blank"
             className="backdrop-blur-md group cursor-pointer relative w-24 flex justify-center items-center border-r-[1px] border-slate-100/20 h-full transition-colors duration-500"
           >
@@ -88,7 +88,7 @@ export default function Header() {
             <div className="z-0 group-hover:w-full bg-moon absolute bottom-0 h-full w-0 left-0 transition-all ease-in-out duration-500" />
           </a>
           <a
-            href="https://twitter.com/dopamoonxyz"
+            href="https://twitter.com/realbase2earn"
             target="_blank"
             className="backdrop-blur-md group cursor-pointer relative w-24 flex justify-center items-center border-r-[1px] border-slate-100/20 h-full transition-colors duration-500"
           >

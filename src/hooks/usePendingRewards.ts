@@ -3,7 +3,7 @@ import swampABI from "../statics/abis/LPStakingABI.json";
 import { formatEther } from "viem";
 import {
   CHAIN_ID,
-  STAKING_CONTRACT,
+  CONTRACT,
 } from "../statics/addresses";
 
 export default function usePendingRewards(rewardTokenAddress: string) {
@@ -11,7 +11,7 @@ export default function usePendingRewards(rewardTokenAddress: string) {
 
   const { data } = useContractRead({
     abi: swampABI,
-    address: STAKING_CONTRACT,
+    address: CONTRACT,
     functionName: "earned",
     args: [address, rewardTokenAddress],
     chainId: CHAIN_ID,

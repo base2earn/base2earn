@@ -40,7 +40,7 @@ export default function Stake() {
             className={`w-full border-[1px] backdrop-blur-sm border-slate-100/20 rounded-md bg-dark p-6 font-sans`}
           >
             <div className="text-xl font-bold text-center">
-              Burn XX to earn % of the pool
+              Burn $B2E to earn a % of the reward pool
             </div>
 
             <div className="mt-6 w-full justify-between flex items-center">

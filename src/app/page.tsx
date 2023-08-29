@@ -10,8 +10,7 @@ import useApprove from "@/src/hooks/useApprove";
 import { B2E_ADDRESS, CONTRACT } from "@/src/statics/addresses";
 import useBurn from "@/src/hooks/useBurn";
 import { formatNumberToCurrency } from "@/src/statics/helpers/numberFormatter";
-import useTotalStakedLP from "@/src/hooks/useTotalStakedLP";
-import useUserStakedLP from "@/src/hooks/useUserStakedLP";
+import useGetStats from "../hooks/useGetStats";
 
 export default function Stake() {
   const [value, setValue] = useState("");
@@ -19,8 +18,7 @@ export default function Stake() {
   const web2Context = useWeb2Context();
   const b2eBalance = useTokenBalance(B2E_ADDRESS);
 
-  const totalStakedLP = useTotalStakedLP();
-  const userStakedLP = useUserStakedLP();
+  const stats = useGetStats();
 
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
 
@@ -49,13 +47,13 @@ export default function Stake() {
               <div className="flex flex-col  text-center">
                 Current Pool Reward
                 <div className="flex gap-2 items-center">
-                  <div className="font-bold">{totalStakedLP.toFixed(4)}</div>
+                  <div className="font-bold">{stats.rewardPool.toFixed(4)} ETH</div>
                   <div>
                     {web2Context && (
                       <span>
                         (
                         {formatNumberToCurrency(
-                          totalStakedLP * Number(web2Context.ethPrice)
+                          stats.rewardPool * Number(web2Context.ethPrice)
                         )}
                         )
                       </span>
@@ -66,13 +64,15 @@ export default function Stake() {
               <div className="flex flex-col  text-center">
                 Total Burned
                 <div className="flex gap-2 items-center">
-                  <div className="font-bold">{totalStakedLP.toFixed(4)}</div>
+                  <div className="font-bold">
+                    {stats.totalBurned.toFixed(4)} ETH
+                  </div>
                   <div>
                     {web2Context && (
                       <span>
                         (
                         {formatNumberToCurrency(
-                          totalStakedLP * Number(web2Context.b2ePrice)
+                          stats.totalBurned * Number(web2Context.b2ePrice)
                         )}
                         )
                       </span>
@@ -83,13 +83,15 @@ export default function Stake() {
               <div className="flex flex-col text-center">
                 <div>Total Rewards</div>
                 <div className="flex gap-2 items-center">
-                  <div className="font-bold">{userStakedLP.toFixed(4)}</div>
+                  <div className="font-bold">
+                    {stats.totalRewards.toFixed(4)} ETH
+                  </div>
                   <div>
                     {web2Context && (
                       <span>
                         (
                         {formatNumberToCurrency(
-                          totalStakedLP * Number(web2Context.b2ePrice)
+                          stats.totalRewards * Number(web2Context.ethPrice)
                         )}
                         )
                       </span>
@@ -102,10 +104,10 @@ export default function Stake() {
             <div className="mt-6">
               <div className="w-full justify-between flex">
                 <div className="flex gap-1">
-                  <div>In Wallet: </div>
+                  <div>In Wallet:</div>
                   <div className="font-bold">
                     {b2eBalance ? Number(b2eBalance.formatted).toFixed(4) : "0"}
-                    B2E
+                    &nbsp;B2E
                   </div>
                 </div>
                 <a

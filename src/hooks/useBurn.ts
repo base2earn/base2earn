@@ -1,11 +1,10 @@
 import { Address } from "viem";
 import {
-  useAccount,
   useContractWrite,
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import swampABI from "../statics/abis/LPStakingABI.json";
+import swampABI from "../statics/abis/contractABI.json";
 import { CONTRACT } from "../statics/addresses";
 
 export default function useBurn(amountIn: BigInt, enabled: boolean) {
@@ -13,7 +12,7 @@ export default function useBurn(amountIn: BigInt, enabled: boolean) {
     address: CONTRACT as Address,
     abi: swampABI,
     enabled: enabled,
-    functionName: "burn",
+    functionName: "burn2earn",
     args: [amountIn],
     onError(err) {
       console.error(err);

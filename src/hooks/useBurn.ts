@@ -6,8 +6,11 @@ import {
 } from "wagmi";
 import swampABI from "../statics/abis/contractABI.json";
 import { CONTRACT } from "../statics/addresses";
+import useFirework from "@/src/hooks/useFireworks";
 
 export default function useBurn(amountIn: BigInt, enabled: boolean) {
+  const { firework } = useFirework();
+
   const preparation = usePrepareContractWrite({
     address: CONTRACT as Address,
     abi: swampABI,
@@ -30,6 +33,9 @@ export default function useBurn(amountIn: BigInt, enabled: boolean) {
     hash: transaction.data?.hash,
     onError(error) {
       console.error(error);
+    },
+    onSuccess(data) {
+      firework();
     },
   });
 

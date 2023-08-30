@@ -2,29 +2,25 @@
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import NumberInput from "@/src/components/Reusable/NumberInput";
-import { Address, parseEther } from "viem";
+import { parseEther } from "viem";
 import useTokenBalance from "@/src/hooks/useTokenBalance";
 import { useWeb2Context } from "@/src/contexts/web2Context";
-import useAllowance from "@/src/hooks/useAllowance";
-import useApprove from "@/src/hooks/useApprove";
 import { B2E_ADDRESS, CONTRACT } from "@/src/statics/addresses";
 import useBurn from "@/src/hooks/useBurn";
 import { formatNumberToCurrency } from "@/src/statics/helpers/numberFormatter";
 import useGetStats from "../hooks/useGetStats";
+import useGetNextBurn from "../hooks/useGetNextBurn";
+import Timer from "../components/Reusable/Timer";
 
 export default function Stake() {
   const [value, setValue] = useState("");
 
   const web2Context = useWeb2Context();
   const b2eBalance = useTokenBalance(B2E_ADDRESS);
-
+  const nextTimeBurn = useGetNextBurn();
   const stats = useGetStats();
 
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
-
-  const b2eAllowance = useAllowance(B2E_ADDRESS as Address, CONTRACT);
-  const approveTX = useApprove(amountIn, B2E_ADDRESS as Address, CONTRACT);
-
   const burnTX = useBurn(amountIn, amountIn > 0);
 
   return (
@@ -47,7 +43,9 @@ export default function Stake() {
               <div className="flex flex-col  text-center">
                 Current Pool Reward
                 <div className="flex gap-2 items-center">
-                  <div className="font-bold">{stats.rewardPool.toFixed(4)} ETH</div>
+                  <div className="font-bold">
+                    {stats.rewardPool.toFixed(4)} ETH
+                  </div>
                   <div>
                     {web2Context && (
                       <span>
@@ -101,6 +99,10 @@ export default function Stake() {
               </div>
             </div>
 
+            <div className="mt-5">
+              <Timer toDate={nextTimeBurn} />
+            </div>
+
             <div className="mt-6">
               <div className="w-full justify-between flex">
                 <div className="flex gap-1">
@@ -127,35 +129,21 @@ export default function Stake() {
                 unitPrice={web2Context?.b2ePrice}
               />
               <div className="mt-6 w-full flex justify-between gap-6 font-bold">
-                {amountIn > 0 && b2eAllowance < amountIn ? (
-                  <button
-                    disabled={!approveTX.transaction.write || !value}
-                    onClick={() => {
-                      if (approveTX.transaction.write) {
-                        approveTX.transaction.write();
-                      }
-                    }}
-                    className="disabled:contrast-50 bg-moon rounded-md w-full gap-2 transition-transform relative flex justify-center items-center px-4 h-12"
-                  >
-                    {approveTX.confirmation.isLoading ? "APPROVING" : "APPROVE"}
-                  </button>
-                ) : (
-                  <button
-                    disabled={
-                      !burnTX.transaction.write ||
-                      !value ||
-                      (b2eBalance && amountIn > b2eBalance.value)
+                <button
+                  disabled={
+                    !burnTX.transaction.write ||
+                    !value ||
+                    (b2eBalance && amountIn > b2eBalance.value)
+                  }
+                  onClick={() => {
+                    if (burnTX.transaction.write) {
+                      burnTX.transaction.write();
                     }
-                    onClick={() => {
-                      if (burnTX.transaction.write) {
-                        burnTX.transaction.write();
-                      }
-                    }}
-                    className="disabled:contrast-50 flex-col bg-moon rounded-md w-full transition-transform relative flex justify-center items-center px-4 h-12 "
-                  >
-                    {burnTX.confirmation.isLoading ? "BURNING" : "BURN"}
-                  </button>
-                )}
+                  }}
+                  className="disabled:contrast-50 flex-col bg-moon rounded-md w-full transition-transform relative flex justify-center items-center px-4 h-12 "
+                >
+                  {burnTX.confirmation.isLoading ? "BURNING" : "BURN"}
+                </button>
               </div>
               <div className="mt-2 text-xs">
                 Burn rewards are limited to 10% of pool, to ensure the most

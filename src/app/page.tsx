@@ -20,6 +20,7 @@ export default function Stake() {
   const nextTimeBurn = useGetNextBurn();
   const stats = useGetStats();
 
+  console.log("nextTimeBurn", nextTimeBurn);
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
   const burnTX = useBurn(amountIn, amountIn > 0);
 
@@ -41,7 +42,7 @@ export default function Stake() {
 
             <div className="mt-6 w-full justify-between flex items-center">
               <div className="flex flex-col  text-center">
-                Current Pool Reward
+                Total Burn Pool Balance
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">
                     {stats.rewardPool.toFixed(4)} ETH
@@ -60,10 +61,10 @@ export default function Stake() {
                 </div>
               </div>
               <div className="flex flex-col  text-center">
-                Total Burned
+                Total Burned Tokens
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">
-                    {stats.totalBurned.toFixed(4)} ETH
+                    {stats.totalBurned.toFixed(4)} B2E
                   </div>
                   <div>
                     {web2Context && (
@@ -79,10 +80,10 @@ export default function Stake() {
                 </div>
               </div>
               <div className="flex flex-col text-center">
-                <div>Total Rewards</div>
+                <div>Total Claimed ETH</div>
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">
-                    {stats.totalRewards.toFixed(4)} ETH
+                    {stats.totalRewards.toFixed(6)} ETH
                   </div>
                   <div>
                     {web2Context && (
@@ -100,7 +101,7 @@ export default function Stake() {
             </div>
 
             <div className="mt-5 text-center text-2xl text-orange">
-              <Timer toDate={nextTimeBurn} />
+              <Timer seconds={nextTimeBurn} />
             </div>
 
             <div className="mt-6">

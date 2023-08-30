@@ -11,6 +11,8 @@ import { formatNumberToCurrency } from "@/src/statics/helpers/numberFormatter";
 import useGetStats from "../hooks/useGetStats";
 import useGetNextBurn from "../hooks/useGetNextBurn";
 import Timer from "../components/Reusable/Timer";
+import useGetBurnCap from "../hooks/useGetBurnCap";
+import useEstimate from "../hooks/useEstimate";
 
 export default function Stake() {
   const [value, setValue] = useState("");
@@ -19,10 +21,19 @@ export default function Stake() {
   const b2eBalance = useTokenBalance(B2E_ADDRESS);
   const nextTimeBurn = useGetNextBurn();
   const stats = useGetStats();
+  const maxAmount = useGetBurnCap();
 
-  console.log("nextTimeBurn", nextTimeBurn);
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
   const burnTX = useBurn(amountIn, amountIn > 0);
+
+  const acceptedValue = useMemo(() => {
+    if (Number(value) <= maxAmount) {
+      return value;
+    }
+    return maxAmount.toString();
+  }, [value, maxAmount]);
+
+  const estimateOut = useEstimate(acceptedValue);
 
   return (
     <section className="relative z-10 w-full flex items-center">
@@ -113,22 +124,32 @@ export default function Stake() {
                     &nbsp;B2E
                   </div>
                 </div>
-                <a
-                  target="_blank"
-                  href="https://shibbex.com/legacy/add/ETH/0xB0cb6dE25BFc5811E323DBF0495d9BA6A154f43a?chainId=109"
-                  className="underline text-moon"
-                >
-                  Get B2E
-                </a>
+                <div className="flex gap-5">
+                  <a
+                    target="_blank"
+                    href="https://shibbex.com/legacy/add/ETH/0xB0cb6dE25BFc5811E323DBF0495d9BA6A154f43a?chainId=109"
+                    className="underline text-moon"
+                  >
+                    Get B2E
+                  </a>
+                  Max Burn Amount: {maxAmount} B2E
+                </div>
               </div>
 
               <NumberInput
                 tokenSymbol="B2E"
-                value={value}
+                value={acceptedValue}
                 balance={b2eBalance ? b2eBalance.formatted : "0"}
                 setValueCallback={setValue}
                 unitPrice={web2Context?.b2ePrice}
               />
+
+              <div className="flex gap-2">
+                <div>Return Amount: </div>
+                <div>
+                  {estimateOut} ETH (${estimateOut * Number(web2Context?.ethPrice)})
+                </div>
+              </div>
               <div className="mt-6 w-full flex justify-between gap-6 font-bold">
                 <button
                   disabled={

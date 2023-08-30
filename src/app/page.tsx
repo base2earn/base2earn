@@ -99,7 +99,7 @@ export default function Stake() {
               </div>
             </div>
 
-            <div className="mt-5">
+            <div className="mt-5 text-center text-2xl text-orange">
               <Timer toDate={nextTimeBurn} />
             </div>
 

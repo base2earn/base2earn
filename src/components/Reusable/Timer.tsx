@@ -23,11 +23,11 @@ export default function Timer({ toDate }: { toDate: number }) {
   }, [countDown]);
 
   if (countDown < 0) {
-    return <div className="font-bold">Ended</div>;
+    return <div className="font-bold">Can burn now!</div>;
   } else if (hours >= 1) {
     return (
-      <div className="font-bold">{`${hours}h ${minutes}m ${seconds}s`}</div>
+      <div className="font-bold">{`Next Burn in ${hours}h ${minutes}m ${seconds}s`}</div>
     );
   }
-  return <div className="font-bold">{`${minutes}m ${seconds}s`}</div>;
+  return <div className="font-bold">{`Next Burn in ${minutes}m ${seconds}s`}</div>;
 }

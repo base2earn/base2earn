@@ -15,7 +15,7 @@ export default function useBurn(amountIn: BigInt, enabled: boolean) {
     address: CONTRACT as Address,
     abi: swampABI,
     enabled: enabled,
-    functionName: "burn2earn",
+    functionName: "burn2Earn",
     args: [amountIn],
     onError(err) {
       console.error(err);

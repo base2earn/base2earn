@@ -64,7 +64,7 @@ export default function Header() {
               <Image src={logo} alt="logo" height={35} />
               {web2Context &&
                 web2Context.b2ePrice &&
-                `$${web2Context.b2ePrice.toFixed(2)}`}
+                `$${web2Context.b2ePrice.toFixed(5)}`}
             </a>
           </motion.div>
         </div>

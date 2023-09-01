@@ -19,7 +19,7 @@ import { jsonRpcProvider } from "wagmi/providers/jsonRpc";
 import { CHAIN_ID } from "../statics/addresses";
 
 const baseChain = {
-  id: 8453,
+  id: CHAIN_ID,
   name: "Base",
   network: "Base Mainnet",
   iconUrl: "https://basescan.org/images/logo-symbol.svg",
@@ -44,35 +44,9 @@ const baseChain = {
   testnet: false,
 };
 
-export const shib = {
-  id: 109,
-  name: 'Shibarium',
-  network: 'Shibarium',
-  iconUrl:
-    'https://uploads-ssl.webflow.com/64a576093dd515c9042b0db7/64a576093dd515c9042b0e15_Shibariumtech.svg',
-  iconBackground: '#fff',
-  nativeCurrency: {
-    decimals: 18,
-    name: 'Bone',
-    symbol: 'BONE',
-  },
-  rpcUrls: {
-    public: {
-      http: ['https://www.shibrpc.com/'],
-    },
-    default: {
-      http: ['https://www.shibrpc.com/'],
-    },
-  },
-  blockExplorers: {
-    default: { name: 'ShibariumScan', url: 'https://www.shibariumscan.io/' },
-    etherscan: { name: 'ShibariumScan', url: 'https://www.shibariumscan.io/' },
-  },
-  testnet: false,
-};
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [shib],
+  [baseChain],
   [
     jsonRpcProvider({
       rpc: (chain) => ({ http: chain.rpcUrls.default.http[0] }),

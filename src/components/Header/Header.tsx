@@ -58,7 +58,7 @@ export default function Header() {
 
             <a
               className="flex items-center justify-center gap-2 hover:text-green-400 transition-colors"
-              href="https://dexscreener.com/shibarium/0x4a89dbcf583f899371ca9dacd9a9840202caf160"
+              href="https://dexscreener.com/base/0x210dd3a97ff82a3eba4aa60d85b2eb2972ff3322"
               target="_blank"
             >
               <Image src={logo} alt="logo" height={35} />

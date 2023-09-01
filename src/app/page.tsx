@@ -127,7 +127,7 @@ export default function Stake() {
                 <div className="flex gap-5">
                   <a
                     target="_blank"
-                    href="https://shibbex.com/legacy/add/ETH/0xB0cb6dE25BFc5811E323DBF0495d9BA6A154f43a?chainId=109"
+                    href="https://app.alienbase.xyz/?outputCurrency=0x7c01268fF1797daA31ed155D72d86723e8a499e7&chainId=8453"
                     className="underline text-moon"
                   >
                     Get B2E

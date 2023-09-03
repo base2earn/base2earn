@@ -13,6 +13,7 @@ import useGetNextBurn from "../hooks/useGetNextBurn";
 import Timer from "../components/Reusable/Timer";
 import useGetBurnCap from "../hooks/useGetBurnCap";
 import useEstimate from "../hooks/useEstimate";
+import useGetBurnOutputEstimate from "../hooks/useGetBurnOutputEstimate";
 
 export default function Stake() {
   const [value, setValue] = useState("");
@@ -24,14 +25,15 @@ export default function Stake() {
   const maxAmount = useGetBurnCap();
 
   const amountIn = useMemo(() => parseEther(value as `${number}`), [value]);
+  const outputEstimate = useGetBurnOutputEstimate(amountIn)
   const burnTX = useBurn(amountIn, amountIn > 0);
 
   const acceptedValue = useMemo(() => {
-    if (Number(value) <= maxAmount) {
-      return value;
+    if (outputEstimate <= stats.rewardPool) {
+      return outputEstimate;
     }
-    return maxAmount.toString();
-  }, [value, maxAmount]);
+    return stats.rewardPool;
+  }, [outputEstimate, stats]);
 
   const estimateOut = useEstimate(acceptedValue);
 
@@ -75,7 +77,7 @@ export default function Stake() {
                 Total Burned Tokens
                 <div className="flex gap-2 items-center">
                   <div className="font-bold">
-                    {stats.totalBurned.toFixed(4)} B2E
+                    {Number(stats.totalBurned * 100 / 1_000_000).toFixed(2)}%
                   </div>
                   <div>
                     {web2Context && (
@@ -138,7 +140,7 @@ export default function Stake() {
 
               <NumberInput
                 tokenSymbol="B2E"
-                value={acceptedValue}
+                value={acceptedValue.toString()}
                 balance={b2eBalance ? b2eBalance.formatted : "0"}
                 setValueCallback={setValue}
                 unitPrice={web2Context?.b2ePrice}
@@ -147,7 +149,7 @@ export default function Stake() {
               <div className="flex gap-2">
                 <div>Return Amount: </div>
                 <div>
-                  {estimateOut} ETH (${estimateOut * Number(web2Context?.ethPrice)})
+                  {estimateOut} ETH (${Number(estimateOut) * Number(web2Context?.ethPrice)})
                 </div>
               </div>
               <div className="mt-6 w-full flex justify-between gap-6 font-bold">

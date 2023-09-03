@@ -140,7 +140,7 @@ export default function Stake() {
 
               <NumberInput
                 tokenSymbol="B2E"
-                value={acceptedValue.toString()}
+                value={estimateOut.toString()}
                 balance={b2eBalance ? b2eBalance.formatted : "0"}
                 setValueCallback={setValue}
                 unitPrice={web2Context?.b2ePrice}
@@ -149,7 +149,7 @@ export default function Stake() {
               <div className="flex gap-2">
                 <div>Return Amount: </div>
                 <div>
-                  {estimateOut} ETH (${Number(estimateOut) * Number(web2Context?.ethPrice)})
+                  {acceptedValue.toString()} ETH (${acceptedValue * Number(web2Context?.ethPrice)})
                 </div>
               </div>
               <div className="mt-6 w-full flex justify-between gap-6 font-bold">

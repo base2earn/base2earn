@@ -28,7 +28,7 @@ export default function Web2Provider({ children }: Props) {
   useEffect(() => {
     async function fetchPrices() {
       const req = await fetch(
-        "https://api.dexscreener.com/latest/dex/pairs/base/0x210dd3a97ff82a3eba4aa60d85b2eb2972ff3322",
+        "https://api.dexscreener.com/latest/dex/pairs/bsc/0x1Af8cb7660330F4db7Fa9F62a24830DE226A0f65",
         { next: { revalidate: 10 } }
       );
       const priceData = await req.json();

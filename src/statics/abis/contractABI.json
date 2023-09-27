@@ -3,17 +3,91 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "routerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address payable",
-        "name": "marketingWallet",
+        "name": "router",
         "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
     "type": "constructor"
+  },
+  {
+    "inputs": [],
+    "name": "CannotBurnYet",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "ERC20InsufficientAllowance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "ExceedingBurnCap",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "InsuffcientBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "name": "InsufficientContractETHBalance",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidParameters",
+    "type": "error"
+  },
+  {
+    "inputs": [],
+    "name": "InvalidReferrer",
+    "type": "error"
   },
   {
     "anonymous": false,
@@ -46,23 +120,55 @@
       {
         "indexed": false,
         "internalType": "address",
-        "name": "account",
+        "name": "",
         "type": "address"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "burnAmount",
+        "name": "",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "ethRecievedAmount",
+        "name": "",
         "type": "uint256"
       }
     ],
     "name": "BurnedAndEarned",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "uint8",
+        "name": "version",
+        "type": "uint8"
+      }
+    ],
+    "name": "Initialized",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "user",
+        "type": "address"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "LaunchFee",
     "type": "event"
   },
   {
@@ -90,74 +196,17 @@
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "tokensSwapped",
+        "name": "baseAmountReflected",
         "type": "uint256"
       },
       {
         "indexed": false,
         "internalType": "uint256",
-        "name": "ethReceived",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "tokensIntoLiqudity",
+        "name": "totalReflected",
         "type": "uint256"
       }
     ],
-    "name": "SwapAndLiquify",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "bool",
-        "name": "enabled",
-        "type": "bool"
-      }
-    ],
-    "name": "SwapAndLiquifyEnabledUpdated",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      }
-    ],
-    "name": "SwapETHForTokens",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": false,
-        "internalType": "uint256",
-        "name": "amountIn",
-        "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address[]",
-        "name": "path",
-        "type": "address[]"
-      }
-    ],
-    "name": "SwapTokensForETH",
+    "name": "Reflect",
     "type": "event"
   },
   {
@@ -187,139 +236,35 @@
   },
   {
     "inputs": [],
-    "name": "_b2EShares",
+    "name": "UNISWAP_V2_ROUTER",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "contract IUniswapV2Router02",
         "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_devShares",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_liquidityShares",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_maxTxAmount",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_totalDistributionShares",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_totalTaxIfBuying",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_totalTaxIfSelling",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "_walletMax",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "account",
         "type": "address"
       }
     ],
-    "name": "addMarketPair",
-    "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "maxTxAmount",
+        "name": "tokensForLiquidity",
         "type": "uint256"
       }
     ],
-    "name": "adjustMaxTxAmount",
+    "name": "addLiquidity",
     "outputs": [],
-    "stateMutability": "nonpayable",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "owner",
+        "name": "holder",
         "type": "address"
       },
       {
@@ -364,29 +309,22 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "b2eCapDivisor",
-    "outputs": [
+    "inputs": [
       {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
+        "internalType": "address",
+        "name": "spender",
+        "type": "address"
       }
     ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "b2eSub1EthCap",
+    "name": "approveMax",
     "outputs": [
       {
-        "internalType": "uint256",
+        "internalType": "bool",
         "name": "",
-        "type": "uint256"
+        "type": "bool"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
@@ -412,24 +350,16 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "amount",
+        "name": "baseAmount",
         "type": "uint256"
-      }
-    ],
-    "name": "burn2Earn",
-    "outputs": [
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "address",
+        "name": "account",
+        "type": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "burnIntervalInSeconds",
+    "name": "baseToReflectionAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -443,68 +373,59 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
+        "internalType": "uint256",
+        "name": "amount",
+        "type": "uint256"
       }
     ],
-    "name": "checkExcludedFromFees",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "checkMarketPair",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "checkTxLimitExcept",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "burn2Earn",
+    "outputs": [],
+    "stateMutability": "nonpayable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "checkWalletLimit",
+    "name": "buyFee",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint8",
+        "name": "marketing",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "treasury",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "lp",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "buyback",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "reflection",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "burn",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "b2e",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint128",
+        "name": "total",
+        "type": "uint128"
       }
     ],
     "stateMutability": "view",
@@ -513,33 +434,117 @@
   {
     "inputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "name": "checkWalletLimitExcept",
-    "outputs": [
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "marketing",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "treasury",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "lp",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "buyback",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "reflection",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "burn",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "b2e",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint128",
+            "name": "total",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct BaseReflectionBurn.Fee",
+        "name": "_buyFee",
+        "type": "tuple"
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "components": [
+          {
+            "internalType": "uint8",
+            "name": "marketing",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "treasury",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "lp",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "buyback",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "reflection",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "burn",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint8",
+            "name": "b2e",
+            "type": "uint8"
+          },
+          {
+            "internalType": "uint128",
+            "name": "total",
+            "type": "uint128"
+          }
+        ],
+        "internalType": "struct BaseReflectionBurn.Fee",
+        "name": "_sellFee",
+        "type": "tuple"
       }
     ],
-    "stateMutability": "view",
+    "name": "changeFees",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "deadAddress",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
+    "name": "clearStuckBalance",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "clearStuckToken",
+    "outputs": [],
+    "stateMutability": "payable",
     "type": "function"
   },
   {
@@ -552,6 +557,62 @@
         "type": "uint8"
       }
     ],
+    "stateMutability": "pure",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "feesEnabled",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "",
+        "type": "uint256"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "getB2Einfo",
+    "outputs": [
+      {
+        "internalType": "uint256",
+        "name": "_totalBurned",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_totalBurnRewards",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_b2eETHbalance",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_timeToNextBurn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxTokensToBurn",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_burnCapInEth",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_maxEthOutput",
+        "type": "uint256"
+      }
+    ],
     "stateMutability": "view",
     "type": "function"
   },
@@ -559,147 +620,39 @@
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
+        "name": "newMarketingFeeReceiver",
         "type": "address"
       },
       {
-        "internalType": "uint256",
-        "name": "subtractedValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "decreaseAllowance",
-    "outputs": [
+        "internalType": "address",
+        "name": "newLPfeeReceiver",
+        "type": "address"
+      },
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
+        "internalType": "address",
+        "name": "newBuyBackFeeReceiver",
+        "type": "address"
+      },
       {
-        "internalType": "bool",
-        "name": "newValue",
-        "type": "bool"
+        "internalType": "address",
+        "name": "newTreasuryReceiver",
+        "type": "address"
       }
     ],
-    "name": "enableDisableWalletLimit",
+    "name": "initialize",
     "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getBurnCap",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "input",
-        "type": "uint256"
-      }
-    ],
-    "name": "getBurnOutputEstimate",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getCirculatingSupply",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getStats",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "getTimeToNextBurn",
-    "outputs": [
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      }
-    ],
-    "stateMutability": "view",
+    "stateMutability": "payable",
     "type": "function"
   },
   {
     "inputs": [
       {
         "internalType": "address",
-        "name": "spender",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "addedValue",
-        "type": "uint256"
-      }
-    ],
-    "name": "increaseAllowance",
-    "outputs": [
-      {
-        "internalType": "bool",
         "name": "",
-        "type": "bool"
+        "type": "address"
       }
     ],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "lastBurnedTimestamp",
+    "name": "isRegistredPool",
     "outputs": [
       {
         "internalType": "uint256",
@@ -720,7 +673,7 @@
         "type": "string"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -740,178 +693,16 @@
     "inputs": [
       {
         "internalType": "uint256",
-        "name": "newInterval",
-        "type": "uint256"
-      }
-    ],
-    "name": "setBurnInterval",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newBuyTax",
+        "name": "reflectionAmount",
         "type": "uint256"
       },
-      {
-        "internalType": "uint256",
-        "name": "newSellTax",
-        "type": "uint256"
-      }
-    ],
-    "name": "setBuyFee",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newAddress",
-        "type": "address"
-      }
-    ],
-    "name": "setDevMarketingWallet",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newLiquidityShare",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "newDevShare",
-        "type": "uint256"
-      },
-      {
-        "internalType": "uint256",
-        "name": "newB2EShare",
-        "type": "uint256"
-      }
-    ],
-    "name": "setDistributionSettings",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "setMinimumSupplyRatioBeforeSwapInBP",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "newValue",
-        "type": "bool"
-      }
-    ],
-    "name": "setSwapAndLiquifyByLimitOnly",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bool",
-        "name": "_enabled",
-        "type": "bool"
-      }
-    ],
-    "name": "setSwapAndLiquifyEnabled",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "newLimit",
-        "type": "uint256"
-      }
-    ],
-    "name": "setWalletLimit",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
       {
         "internalType": "address",
         "name": "account",
         "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "newValue",
-        "type": "bool"
       }
     ],
-    "name": "setcheckExcludedFromFees",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "holder",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "exempt",
-        "type": "bool"
-      }
-    ],
-    "name": "setcheckTxLimitExcept",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "holder",
-        "type": "address"
-      },
-      {
-        "internalType": "bool",
-        "name": "exempt",
-        "type": "bool"
-      }
-    ],
-    "name": "setcheckWalletLimitExcept",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "staticBurnCap",
+    "name": "reflectionToBaseAmount",
     "outputs": [
       {
         "internalType": "uint256",
@@ -924,25 +715,131 @@
   },
   {
     "inputs": [],
-    "name": "swapAndLiquifyByLimitOnly",
+    "name": "renounceOwnership",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "sellFee",
     "outputs": [
       {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
+        "internalType": "uint8",
+        "name": "marketing",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "treasury",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "lp",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "buyback",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "reflection",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "burn",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint8",
+        "name": "b2e",
+        "type": "uint8"
+      },
+      {
+        "internalType": "uint128",
+        "name": "total",
+        "type": "uint128"
       }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "newMarketingFeeReceiver",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "newLPfeeReceiver",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "newBuybackFeeReceiver",
+        "type": "address"
+      },
+      {
+        "internalType": "address",
+        "name": "newTreasuryReceiver",
+        "type": "address"
+      }
+    ],
+    "name": "setFeeReceivers",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "address",
+        "name": "pool",
+        "type": "address"
+      },
+      {
+        "internalType": "uint256",
+        "name": "state",
+        "type": "uint256"
+      }
+    ],
+    "name": "setRegistredPool",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "_enabled",
+        "type": "uint256"
+      },
+      {
+        "internalType": "uint256",
+        "name": "_amount",
+        "type": "uint256"
+      }
+    ],
+    "name": "setSwapBackSettings",
+    "outputs": [],
+    "stateMutability": "payable",
+    "type": "function"
+  },
+  {
     "inputs": [],
-    "name": "swapAndLiquifyEnabled",
+    "name": "swapThreshold",
     "outputs": [
       {
-        "internalType": "bool",
+        "internalType": "uint256",
         "name": "",
-        "type": "bool"
+        "type": "uint256"
       }
     ],
     "stateMutability": "view",
@@ -958,12 +855,12 @@
         "type": "string"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
     "inputs": [],
-    "name": "totalBurnRewards",
+    "name": "totalReflected",
     "outputs": [
       {
         "internalType": "uint256",
@@ -976,7 +873,7 @@
   },
   {
     "inputs": [],
-    "name": "totalBurned",
+    "name": "totalSubLPBalance",
     "outputs": [
       {
         "internalType": "uint256",
@@ -997,7 +894,7 @@
         "type": "uint256"
       }
     ],
-    "stateMutability": "view",
+    "stateMutability": "pure",
     "type": "function"
   },
   {
@@ -1062,39 +959,6 @@
       }
     ],
     "name": "transferOwnership",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "uniswapPair",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "uniswapV2Router",
-    "outputs": [
-      {
-        "internalType": "contract IUniswapV2Router02",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [],
-    "name": "waiveOwnership",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

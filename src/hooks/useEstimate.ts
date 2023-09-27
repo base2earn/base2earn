@@ -11,7 +11,8 @@ export default function useEstimate(amountIn: number) {
     enabled: Number(amountIn) > 0,
     args: [
       parseEther(amountIn.toString()),
-      [B2E_ADDRESS, "0x4200000000000000000000000000000000000006"],
+      // [B2E_ADDRESS, "0x4200000000000000000000000000000000000006"],
+      [B2E_ADDRESS, "0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"],
     ],
     chainId: CHAIN_ID,
     watch: true,

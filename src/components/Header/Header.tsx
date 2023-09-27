@@ -51,7 +51,7 @@ export default function Header() {
                   transition={{ delay: 2, duration: 1, ease: "linear" }}
                   className="relative h-full text-2xl flex items-center font-bold"
                 >
-                  BASE<span className="text-moon">2</span>EARN
+                  Base<span className="text-moon">Reflection</span>Burn
                 </motion.div>
               </div>
             </Link>

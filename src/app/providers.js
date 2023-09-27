@@ -31,10 +31,12 @@ const baseChain = {
   },
   rpcUrls: {
     public: {
-      http: ["https://mainnet.base.org"],
+      // http: ["https://mainnet.base.org"],
+      http: ["https://binance.llamarpc.com/"],
     },
     default: {
-      http: ["https://mainnet.base.org"],
+      // http: ["https://mainnet.base.org"],
+      http: ["https://binance.llamarpc.com/"],
     },
   },
   blockExplorers: {
@@ -43,7 +45,6 @@ const baseChain = {
   },
   testnet: false,
 };
-
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [baseChain],
@@ -59,7 +60,7 @@ const projectId = process.env.NEXT_PUBLIC_APP_ID
   : "";
 
 const demoAppInfo = {
-  appName: "BASE2EARN",
+  appName: "BaseReflectionBurn",
 };
 
 const connectors = connectorsForWallets([
@@ -68,7 +69,7 @@ const connectors = connectorsForWallets([
     wallets: [
       rabbyWallet({ chains }),
       metaMaskWallet({ projectId, chains }),
-      coinbaseWallet({ appName: "BASE2EARN", chains }),
+      coinbaseWallet({ appName: "BaseReflectionBurn", chains }),
       safeWallet({ chains }),
     ],
   },

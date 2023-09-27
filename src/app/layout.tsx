@@ -17,8 +17,8 @@ const chakra = Chakra_Petch({
 
 export async function generateMetadata(): Promise<Metadata> {
   return {
-    title: "BASE2EARN",
-    description: "$B2E now on Base",
+    title: "BaseReflectionBurn",
+    description: "$BRB now on Base",
   };
 }
 

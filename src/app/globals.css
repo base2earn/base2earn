@@ -7,7 +7,7 @@
   background: linear-gradient(#819AE4, #2E53F5);
   -webkit-background-clip: text;
   color: rgb(var(--background-rgb));
-  font-size: calc(10px + 14vw);
+  font-size: calc(10px + 6vw);
   font-weight: 700;
   left: 50%;
   letter-spacing: calc(2px + 0.4vw);

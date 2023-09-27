@@ -8,5 +8,7 @@ export default function useTokenBalance(token: string | undefined) {
     token: token ? (token as Address) : undefined,
     watch: true,
   });
+
+  console.log("useTokenBalance", data);
   return data;
 }

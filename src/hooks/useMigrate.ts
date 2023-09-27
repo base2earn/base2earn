@@ -4,16 +4,16 @@ import {
   usePrepareContractWrite,
   useWaitForTransaction,
 } from "wagmi";
-import swampABI from "../statics/abis/contractABI.json";
-import { CONTRACT } from "../statics/addresses";
+import contractABI from "../statics/abis/contractABI.json";
+import { BRB_ADDRESS } from "../statics/addresses";
 import useFirework from "@/src/hooks/useFireworks";
 
 export default function useMigrate(amount: BigInt, enabled: boolean) {
   const { firework } = useFirework();
 
   const preparation = usePrepareContractWrite({
-    address: CONTRACT as Address,
-    abi: swampABI,
+    address: BRB_ADDRESS as Address,
+    abi: contractABI,
     enabled: enabled,
     functionName: "migrate",
     args: [amount],

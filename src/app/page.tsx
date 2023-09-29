@@ -2,10 +2,14 @@
 import { motion } from "framer-motion";
 import { useState, useMemo } from "react";
 import NumberInput from "@/src/components/Reusable/NumberInput";
-import { parseEther } from "viem";
+import { formatEther, parseEther } from "viem";
 import useTokenBalance from "@/src/hooks/useTokenBalance";
 import { useWeb2Context } from "@/src/contexts/web2Context";
-import { B2E_ADDRESS, BRB_ADDRESS } from "@/src/statics/addresses";
+import {
+  B2E_ADDRESS,
+  BRB_ADDRESS,
+  MIGRATION_ADDRESS,
+} from "@/src/statics/addresses";
 import useBurn from "@/src/hooks/useBurn";
 import { formatNumberToCurrency } from "@/src/statics/helpers/numberFormatter";
 import Timer from "../components/Reusable/Timer";
@@ -16,6 +20,8 @@ import useBaseToReflectionAmount from "../hooks/useBaseToReflectionAmount";
 import useTotalSupply from "../hooks/useTotalSupply";
 import useMigrate from "../hooks/useMigrate";
 import { useBalance } from "wagmi";
+import useAllowance from "../hooks/useAllowance";
+import useApprove from "../hooks/useApprove";
 
 export default function Stake() {
   const [value, setValue] = useState("");
@@ -31,6 +37,13 @@ export default function Stake() {
   const burnTX = useBurn(amountIn, amountIn > 0);
   const stats = useGetB2Einfo();
 
+  const b2eAllowance = useAllowance(B2E_ADDRESS, MIGRATION_ADDRESS);
+  const migrateApproveTX = useApprove(
+    b2eAllowance,
+    B2E_ADDRESS,
+    MIGRATION_ADDRESS
+  );
+  console.log("b2eAllowance", b2eAllowance);
   const [migrateValue, setMigrateValue] = useState("");
   const migrateAmount = useMemo(
     () => parseEther(migrateValue as `${number}`),
@@ -80,7 +93,7 @@ export default function Stake() {
 
                   <NumberInput
                     tokenSymbol="BRB"
-                    value={estimateOut.toString()}
+                    value={formatEther(migrateAmount)}
                     balance={b2eBalance ? b2eBalance.formatted : "0"}
                     setValueCallback={setMigrateValue}
                     unitPrice={web2Context?.b2ePrice}
@@ -88,11 +101,7 @@ export default function Stake() {
 
                   <div className="mt-6 w-full flex justify-between gap-6 font-bold">
                     <button
-                      disabled={
-                        !migrateTX.transaction.write ||
-                        !migrateValue ||
-                        (b2eBalance && migrateAmount > b2eBalance.value)
-                      }
+                      disabled={false}
                       onClick={() => {
                         if (migrateTX.transaction.write) {
                           migrateTX.transaction.write();
@@ -100,7 +109,24 @@ export default function Stake() {
                       }}
                       className="disabled:contrast-50 flex-col bg-moon rounded-md w-full transition-transform relative flex justify-center items-center px-4 h-12 "
                     >
-                      {burnTX.confirmation.isLoading ? "MIGRATING" : "MIGRATE"}
+                      {burnTX.confirmation.isLoading ? "APPROVING" : "APPROVE"}
+                    </button>
+                    <button
+                      disabled={
+                        !migrateTX.transaction.write ||
+                        !migrateValue ||
+                        (b2eBalance && migrateAmount > b2eBalance.value)
+                      }
+                      onClick={() => {
+                        if (migrateApproveTX.transaction.write) {
+                          migrateApproveTX.transaction.write();
+                        }
+                      }}
+                      className="disabled:contrast-50 flex-col bg-moon rounded-md w-full transition-transform relative flex justify-center items-center px-4 h-12 "
+                    >
+                      {migrateTX.confirmation.isLoading
+                        ? "MIGRATING"
+                        : "MIGRATE"}
                     </button>
                   </div>
                 </div>
@@ -111,7 +137,7 @@ export default function Stake() {
       ) : null}
       <section
         className={`relative z-10 w-full flex items-center ${
-          +b2eBalance?.formatted > 0 ? "my-8" : null
+          b2eBalance && +b2eBalance.formatted > 0 ? "my-8" : null
         }`}
       >
         <motion.div
@@ -173,8 +199,8 @@ export default function Stake() {
                   <div className="flex gap-1">
                     <div>In Wallet:</div>
                     <div className="font-bold">
-                      {b2eBalance
-                        ? Number(b2eBalance.formatted).toFixed(4)
+                      {brbBalance
+                        ? Number(brbBalance.formatted).toFixed(4)
                         : "0"}
                       &nbsp;BRB
                     </div>
@@ -195,7 +221,7 @@ export default function Stake() {
                 <NumberInput
                   tokenSymbol="BRB"
                   value={estimateOut.toString()}
-                  balance={b2eBalance ? b2eBalance.formatted : "0"}
+                  balance={brbBalance ? brbBalance.formatted : "0"}
                   setValueCallback={setValue}
                   unitPrice={web2Context?.b2ePrice}
                 />
@@ -212,7 +238,7 @@ export default function Stake() {
                     disabled={
                       !burnTX.transaction.write ||
                       !value ||
-                      (b2eBalance && amountIn > b2eBalance.value)
+                      (brbBalance && amountIn > brbBalance.value)
                     }
                     onClick={() => {
                       if (burnTX.transaction.write) {
